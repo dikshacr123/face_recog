@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Emotion Detector</title>
+</head>
+<body>
+    <h1>Emotion Detector</h1>
+
+    <label for="pixelsInput">Enter Pixel String:</label><br>
+    <textarea id="pixelsInput" rows="5" cols="60" placeholder="Enter your 48x48 pixel string here..."></textarea><br><br>
+
+    <button id="predictBtn">Predict Emotion</button>
+
+    <h2 id="result"></h2>
+
+    <!-- Canvas to show the image -->
+    <canvas id="canvas" width="48" height="48" style="border:1px solid black;"></canvas>
+
+    <script>
+        const predictBtn = document.getElementById('predictBtn');
+        const result = document.getElementById('result');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        predictBtn.addEventListener('click', () => {
+            const pixelString = document.getElementById('pixelsInput').value;
+            
+            // Convert pixel string to array
+            const pixels = pixelString.split(' ').map(Number);
+
+            // Draw image on canvas
+            const imgData = ctx.createImageData(48, 48);
+            for (let i = 0; i < pixels.length; i++) {
+                const value = pixels[i];
+                imgData.data[i*4 + 0] = value; // R
+                imgData.data[i*4 + 1] = value; // G
+                imgData.data[i*4 + 2] = value; // B
+                imgData.data[i*4 + 3] = 255;   // Alpha
+            }
+            ctx.putImageData(imgData, 0, 0);
+
+            // Send to Flask for prediction
+            fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pixels: pixelString })
+            })
+            .then(res => res.json())
+            .then(data => {
+                result.textContent = `Detected Emotion: ${data.emotion}`;
+            })
+            .catch(err => {
+                console.error(err);
+                result.textContent = 'Error predicting emotion';
+            });
+        });
+    </script>
+</body>
+</html>
