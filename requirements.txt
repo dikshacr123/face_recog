@@ -6,3 +6,4 @@ tensorflow
 scikit-plot
 seaborn
 Flask
+gunicorn
