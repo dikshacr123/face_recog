@@ -1,8 +1,5 @@
 numpy
-pandas
-matplotlib
 scikit-learn
-tensorflow-cpu=2.20.0
-scikit-plot
+tensorflow-cpu==2.20.0
 Flask
 gunicorn
