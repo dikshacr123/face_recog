@@ -1,7 +1,5 @@
 from flask import Flask, request, jsonify, render_template
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 from keras.models import load_model
 
 app = Flask(__name__)
