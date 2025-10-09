@@ -12,10 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      # 👇 Install Heroku CLI before deployment
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
 
-      - name: Login to Heroku Container Registry and Deploy
+      # 👇 Login and Deploy using Docker
+      - name: Deploy to Heroku using Docker
         uses: akhileshns/heroku-deploy@v3.12.14
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
