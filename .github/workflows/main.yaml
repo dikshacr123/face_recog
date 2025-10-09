@@ -12,12 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 👇 Install Heroku CLI before deployment
       - name: Install Heroku CLI
         run: |
           curl https://cli-assets.heroku.com/install.sh | sh
 
-      # 👇 Login and Deploy using Docker
+      - name: Set Heroku stack to container
+        run: heroku stack:set container -a ${{ secrets.HEROKU_APP_NAME }}
+
       - name: Deploy to Heroku using Docker
         uses: akhileshns/heroku-deploy@v3.12.14
         with:
